@@ -59,11 +59,9 @@ def compute_page_rank_scores():
 
     # Create a directed graph from the citation data
     G = nx.from_pandas_edgelist(df, source='Citing Paper', target='Cited Paper', create_using=nx.DiGraph())
-    # Initialize all nodes with equal probability (handle dangling nodes)
-    num_nodes = G.number_of_nodes()
-    initial_pagerank = {node: 1 / num_nodes for node in G}
+
     # Compute the PageRank for each paper
-    pagerank_scores = nx.pagerank(G, alpha=0.85, nstart=initial_pagerank)
+    pagerank_scores = nx.pagerank(G, alpha=0.85)
 
     # Convert the PageRank results into a DataFrame
     pagerank_df = pd.DataFrame(list(pagerank_scores.items()), columns=['paper', 'pagerank_score'])
@@ -75,7 +73,7 @@ def compute_page_rank_scores():
     pagerank_df.to_csv('pagerank_scores_all_cr.csv', index=False, quoting=csv.QUOTE_ALL)
 
     # Display the top 10 papers by PageRank score
-    print(pagerank_df.head(20))
+    print(pagerank_df.head(10))
 
 if __name__ == '__main__':
     citation_records()
